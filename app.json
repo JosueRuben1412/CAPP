@@ -4,6 +4,9 @@
     "slug": "coronapp",
     "version": "1.0.0",
     "userInterfaceStyle": "automatic",
-    "plugins": ["expo-router"]
+    "plugins": [
+      "expo-router",
+      "expo-sqlite"
+    ]
   }
 }
