@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import { ProductForm } from '@/features/products/ProductForm';
 import { ProductPage } from '@/features/products/ProductPage';
 import { createProduct, productSaveErrorMessage } from '@/features/products/productActions';
 import { emptyProductDraft, type ProductFields } from '@/features/products/productFields';
 import { useProductRepository } from '@/features/products/useProductRepository';
+import { barcodeFromParam } from '@/features/scanner/barcode';
 
 export default function NewProductScreen() {
   const router = useRouter();
+  const { barcode: barcodeParam } = useLocalSearchParams<{ barcode?: string | string[] }>();
+  const initialBarcode = barcodeFromParam(barcodeParam);
   const repository = useProductRepository();
   const [submitting, setSubmitting] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -29,7 +32,8 @@ export default function NewProductScreen() {
   return (
     <ProductPage title="Nuevo producto">
       <ProductForm
-        initialValues={emptyProductDraft}
+        key={initialBarcode}
+        initialValues={{ ...emptyProductDraft, barcode: initialBarcode }}
         actionLabel="Guardar producto"
         submitting={submitting}
         saveError={saveError}
